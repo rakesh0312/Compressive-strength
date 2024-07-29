@@ -1,0 +1,130 @@
+import pandas as pd 
+import numpy as np 
+import pickle
+import tkinter as tk
+import pickleshare
+from sklearn.ensemble import RandomForestRegressor
+# Load the Random Forest model
+#file_name = "rf_final.pkl"
+#rf_model_loaded = pickle.load(open(file_name, "rb"))
+
+# Load the model from the pickle file
+with open("rf_steelslag.pkl", "rb") as file:
+    rfr_loaded = pickle.load(file)
+# tkinter GUI
+root = tk.Tk() 
+root.title("Prediction of compressive strength")
+
+canvas1 = tk.Canvas(root, width=550, height=500)
+canvas1.configure(background='#e9ecef')
+canvas1.pack()
+
+# ... (rest of the GUI code)
+#adding a label to the root window
+label0 = tk.Label(root, text='Developed by Dr. Rakesh Kumar',font=('Futura Md Bt', 13, 'bold'),bg='#e9ecef')
+canvas1.create_window(20, 20, anchor="w", window=label0)
+label_phd = tk.Label(root, text='Dayananda Sagar College of Engineering, Bengaluru',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 50, anchor="w",window=label_phd)
+label_city = tk.Label(root, text='India',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 80, anchor="w",window=label_city)
+label_mail = tk.Label(root, text='Email: rakesh-cvl@dayanandasagar.edu',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 110, anchor="w",window=label_mail)
+
+
+label_input = tk.Label(root, text='Input Parameters',font=('Futura Md Bt',12,'bold','italic','underline'),bg='#e9ecef')
+canvas1.create_window(20, 140, anchor="w",window=label_input)
+
+# New_Normal_Stress label and input box
+label1 = tk.Label(root, text='Cement, kg/m³ : ',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 170, anchor="w",window=label1)
+
+entry1 = tk.Entry (root) # create 1st entry box
+canvas1.create_window(480, 170, window=entry1)
+
+# New_D50 label and input box
+label2 = tk.Label(root, text='Rice husk, kg/m³ : ',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 200, anchor="w",window=label2)
+
+entry2 = tk.Entry (root) # create 2nd entry box
+canvas1.create_window(480, 200, window=entry2)
+
+# New_FC label and input box
+label3 = tk.Label(root, text='Fine aggregate, kg/m³ : ',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 230, anchor="w",window=label3)
+
+entry3 = tk.Entry (root) # create 3rd entry box
+canvas1.create_window(480, 230, window=entry3)
+
+# New_Length of geogrid label and input box
+label4 = tk.Label(root, text='Steel slag, kg/m³ : ',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 260, anchor="w",window=label4)
+
+entry4 = tk.Entry (root) # create 4th entry box
+canvas1.create_window(480, 260, window=entry4)
+
+# New_Spacing between geogrid longitudinal members label and input box
+label5 = tk.Label(root, text='Coarse aggregate, kg/m³ : ',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 290, anchor="w",window=label5)
+
+entry5 = tk.Entry (root) # create 5th entry box
+canvas1.create_window(480, 290, window=entry5)
+
+# New_Spacing between geogrid transverse members label and input box
+label6 = tk.Label(root, text='w/c : ',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 320, anchor="w",window=label6)
+
+entry6 = tk.Entry (root) # create 6th entry box
+canvas1.create_window(480, 320, window=entry6)
+
+# New_Ultimate Tensile Strength of Geogrid label and input box
+label7 = tk.Label(root, text='Slump, mm : ',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 350, anchor="w",window=label7)
+
+entry7 = tk.Entry (root) # create 7th entry box
+canvas1.create_window(480, 350, window=entry7)
+
+label0000 = tk.Label(root, text='Output',font=('Futura Md Bt',12,'bold','italic','underline'),bg='#e9ecef')
+canvas1.create_window(20, 410, anchor="w",window=label0000)
+
+label_out = tk.Label(root, text='Compressive strength, MPa',font=('Futura Md Bt',12),bg='#e9ecef')
+canvas1.create_window(20, 450, anchor="w",window=label_out)
+
+#entry_out = tk.Entry (root) # create box for output
+#canvas1.create_window(480, 450, window=entry_out)
+
+def values(): 
+    global New_Input_1 # our 1st input variable
+    New_Input_1 = float(entry1.get()) / 1000 
+    
+    global New_Input_2 # our 2nd input variable
+    New_Input_2 = float(entry2.get())
+
+    global New_Input_3 # our 3rd input variable
+    New_Input_3 = float(entry3.get()) / 100
+
+    global New_Input_4 # our 4th input variable
+    New_Input_4 = float(entry4.get()) / 1000
+
+    global New_Input_5 # our 5th input variable
+    New_Input_5 = float(entry5.get()) / 1000
+
+    global New_Input_6 # our 6th input variable
+    New_Input_6 = float(entry6.get()) / 1000
+
+    global New_Input_7 # our 7th input variable
+    New_Input_7 = float(entry7.get()) / 1000
+    
+    data = np.array([[New_Input_1, New_Input_2, New_Input_3, New_Input_4, New_Input_5, New_Input_6, New_Input_7]])
+    Input_data = pd.DataFrame(data, columns=['Input 1', 'Input 2', 'Input 3', 'Input 4', 'Input 5', 'Input 6', 'Input 7'])
+
+    # Predict using the loaded Random Forest model
+    Prediction_result = np.around(rfr_loaded.predict(Input_data), 2)
+
+    # Display the prediction on the GUI
+    label_Prediction = tk.Label(root, text=str(Prediction_result).lstrip('[').rstrip(']'), bg='white')
+    canvas1.create_window(450, 450, anchor="w", window=label_Prediction)
+
+# ... (rest of the GUI code)
+button1 = tk.Button (root, text= 'Predict',command=values, bg='white') # button to call the 'values' command above 
+canvas1.create_window(450, 385, anchor="w",window=button1)
+root.mainloop()
