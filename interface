@@ -3,14 +3,14 @@ import numpy as np
 import pickle
 import tkinter as tk
 import pickleshare
-from sklearn.ensemble import RandomForestRegressor
-# Load the Random Forest model
-#file_name = "rf_final.pkl"
-#rf_model_loaded = pickle.load(open(file_name, "rb"))
+from xgboost import XGBRegressor
+# Load the XGB model
+#file_name = "XGBmodel_final.pkl"
+#XGBmodel_model_loaded = pickle.load(open(file_name, "rb"))
 
 # Load the model from the pickle file
-with open("rf_steelslag.pkl", "rb") as file:
-    rfr_loaded = pickle.load(file)
+with open("XGB_steelslag.pkl", "rb") as file:
+    XGBmodel_loaded = pickle.load(file)
 # tkinter GUI
 root = tk.Tk() 
 root.title("Prediction of compressive strength")
@@ -118,7 +118,7 @@ def values():
     Input_data = pd.DataFrame(data, columns=['Input 1', 'Input 2', 'Input 3', 'Input 4', 'Input 5', 'Input 6', 'Input 7'])
 
     # Predict using the loaded Random Forest model
-    Prediction_result = np.around(rfr_loaded.predict(Input_data), 2)
+    Prediction_result = np.around(XGBmodel_loaded.predict(Input_data), 2)
 
     # Display the prediction on the GUI
     label_Prediction = tk.Label(root, text=str(Prediction_result).lstrip('[').rstrip(']'), bg='white')
